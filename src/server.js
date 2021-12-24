@@ -16,15 +16,17 @@ const handleListening = () => console.log(`✅ Server listening on port http://l
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+const sockets = [];
+
 wss.on("connection", (socket) => {
+  sockets.push(socket);
   console.log("✅ Connected to Browser");
   socket.on("close", () => {
     console.log("❌ Disconnected from Browser");
   });
   socket.on("message", (message) => {
-    console.log(message.toString());
+    sockets.forEach((aSocket) => aSocket.send(message.toString()));
   });
-  socket.send("hello from Server");
 });
 
 server.listen(PORT, handleListening);

@@ -18,11 +18,10 @@ const io = SocketIO(httpServer);
 
 io.on("connection", (socket) => {
   socket.on("enter_room", (roomName, done) => {
-    console.log(roomName);
-    setTimeout(() => {
-      done("hello from the backend");
-    }, 10000);
-  })
+    socket.join(roomName);
+    done();
+    socket.to(roomName).emit("welcome");
+  });
 });
 
 httpServer.listen(PORT, handleListening);

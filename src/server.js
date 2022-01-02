@@ -27,6 +27,9 @@ io.on("connection", (socket) => {
   socket.on("answer", (answer, roomName) => {
     socket.to(roomName).emit("answer", answer);
   });
+  socket.on("candidate", (candidate, roomName) => {
+    socket.to(roomName).emit("candidate", candidate);
+  })
 });
 
 httpServer.listen(PORT, handleListening);

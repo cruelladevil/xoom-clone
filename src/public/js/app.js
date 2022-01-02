@@ -115,7 +115,6 @@ initWelcome();
 socket.on("welcome", async () => {
   const offer = await myPeerConnection.createOffer();
   myPeerConnection.setLocalDescription(offer);
-  console.log("sent the offer");
   socket.emit("offer", offer, roomName);
 });
 
@@ -130,9 +129,26 @@ socket.on("answer", (answer) => {
   myPeerConnection.setRemoteDescription(answer);
 });
 
+socket.on("candidate", (candidate) => {
+  console.log("received candidate");
+  myPeerConnection.addIceCandidate(candidate);
+});
+
 function makeConnection() {
   myPeerConnection = new RTCPeerConnection();
+  myPeerConnection.addEventListener("icecandidate", handleIceCandidate);
+  myPeerConnection.addEventListener("addstream", handleAddStream);
   myStream
     .getTracks()
     .forEach((track) => myPeerConnection.addTrack(track, myStream));
+}
+
+function handleIceCandidate(data) {
+  console.log("sent candidate");
+  socket.emit("candidate", data.candidate, roomName);
+}
+
+function handleAddStream(data) {
+  const peersFace = document.getElementById("peersFace");
+  peersFace.srcObject = data.stream;
 }

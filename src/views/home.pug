@@ -10,22 +10,10 @@ html(lang="ko")
     header
       h1 Xoom
     main
-      div#welcome
-        form#nickname
-          h3
-          input(type="text", placeholder="nickname", required)
-          button Save
-        form#roomname
-          input(type="text", placeholder="room name", required)
-          button Enter Room
-        h4 Open Room:
-        ul
-      div#room
-        h3
-        ul
-        form#message
-          input(type="text", placeholder="write a message", required)
-          button Send
-        button#leave Leave
+      div#myStream
+        video#myFace(autoplay, playsinline, width=400, height=400)
+        button#mute Mute
+        button#camera Turn Camera Off
+        select#cameraSelect 
     script(src="/socket.io/socket.io.js") 
     script(src="/public/js/app.js") 

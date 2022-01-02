@@ -85,10 +85,11 @@ async function handleCameraSelect() {
   await getMedia(cameraSelect.value);
 }
 
-function handleWelcomeSubmit(event) {
+async function handleWelcomeSubmit(event) {
   event.preventDefault();
   const input = welcomeForm.querySelector("input");
-  socket.emit("join_room", input.value, startMedia);
+  await startMedia();
+  socket.emit("join_room", input.value);
   roomName = input.value;
   input.value = "";
 }
@@ -118,8 +119,15 @@ socket.on("welcome", async () => {
   socket.emit("offer", offer, roomName);
 });
 
-socket.on("offer", (offer) => {
-  console.log(offer);
+socket.on("offer", async (offer) => {
+  myPeerConnection.setRemoteDescription(offer);
+  const answer = await myPeerConnection.createAnswer();
+  myPeerConnection.setLocalDescription(answer);
+  socket.emit("answer", answer, roomName);
+});
+
+socket.on("answer", (answer) => {
+  myPeerConnection.setRemoteDescription(answer);
 });
 
 function makeConnection() {

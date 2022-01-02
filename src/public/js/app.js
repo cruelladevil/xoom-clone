@@ -81,8 +81,15 @@ function handleCameraClick() {
   }
 }
 
-async function handleCameraSelect() {
+async function handleCameraChange() {
   await getMedia(cameraSelect.value);
+  if (myPeerConnection) {
+    const videoTrack = myStream.getVideoTracks()[0];
+    const videoSender = myPeerConnection
+      .getSenders()
+      .find((sender) => sender.track.kind === "video");
+    videoSender.replaceTrack(videoTrack);
+  }
 }
 
 async function handleWelcomeSubmit(event) {
@@ -105,7 +112,7 @@ async function initCall() {
   call.style.display = "block";
   muteButton.addEventListener("click", handleMuteClick);
   cameraButton.addEventListener("click", handleCameraClick);
-  cameraSelect.addEventListener("input", handleCameraSelect);
+  cameraSelect.addEventListener("input", handleCameraChange);
   await getMedia();
   makeConnection();
 }

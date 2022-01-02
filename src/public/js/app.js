@@ -88,29 +88,29 @@ async function handleCameraSelect() {
 async function handleWelcomeSubmit(event) {
   event.preventDefault();
   const input = welcomeForm.querySelector("input");
-  await startMedia();
+  await initCall();
   socket.emit("join_room", input.value);
   roomName = input.value;
   input.value = "";
 }
 
-function init() {
+function initWelcome() {
   welcome.style.display = "block";
   call.style.display = "none";
+  welcomeForm.addEventListener("submit", handleWelcomeSubmit);
 }
 
-async function startMedia() {
+async function initCall() {
   welcome.style.display = "none";
   call.style.display = "block";
+  muteButton.addEventListener("click", handleMuteClick);
+  cameraButton.addEventListener("click", handleCameraClick);
+  cameraSelect.addEventListener("input", handleCameraSelect);
   await getMedia();
   makeConnection();
 }
 
-init();
-muteButton.addEventListener("click", handleMuteClick);
-cameraButton.addEventListener("click", handleCameraClick);
-cameraSelect.addEventListener("input", handleCameraSelect);
-welcomeForm.addEventListener("submit", handleWelcomeSubmit);
+initWelcome();
 
 socket.on("welcome", async () => {
   const offer = await myPeerConnection.createOffer();

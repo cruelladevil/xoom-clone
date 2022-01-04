@@ -21,6 +21,10 @@ io.on("connection", (socket) => {
     socket.join(roomName);
     socket.to(roomName).emit("welcome");
   });
+  socket.on("leave_room", (roomName) => {
+    socket.leave(roomName);
+    console.log(socket.rooms);
+  });
   socket.on("offer", (offer, roomName) => {
     socket.to(roomName).emit("offer", offer);
   });
@@ -29,7 +33,7 @@ io.on("connection", (socket) => {
   });
   socket.on("candidate", (candidate, roomName) => {
     socket.to(roomName).emit("candidate", candidate);
-  })
+  });
 });
 
 httpServer.listen(PORT, handleListening);

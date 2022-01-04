@@ -22,5 +22,12 @@ html(lang="ko")
           select#cameraSelect
         div#peersStream
           video#peersFace(autoplay, playsinline, width=400, height=400)
+        div#chat
+          h3
+          ul
+          form
+            input(type="text", placeholder="write a message", required)
+            button Send
+          button#disconnectButton Disconnect
     script(src="/socket.io/socket.io.js") 
     script(src="/public/js/app.js") 
